@@ -11,6 +11,7 @@ import { errorHandlerMidleware } from "./middleware/error.js"
 
 // import Router
 import userRouter from "./routers/userRouter.js"
+import testRouter from "./routers/testRouter.js"
 
 // dot env Config
 dotenv.config({
@@ -32,7 +33,7 @@ app.use(morgan("dev"))
 
 // router
 app.use('/api/v1/auth',userRouter)
-
+app.use('/api/v1/test', testRouter)
 
 app.use('/', (req,res)=>{
     res.send(`<h1>this is the backend of JOB Portal by Arshad</h1>`)
