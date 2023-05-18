@@ -66,3 +66,31 @@ export const loginUser = asyncHandler(async(req,res,next)=>{
         token: user.createJWT()
     })
 })
+
+
+// @desc user's update
+// @router [PUT] api/v1/auth/update
+// @access private
+export const updateUser = asyncHandler(async (req,res,next)=>{
+    const {name, email, location} = req.body;
+    
+    if(!name || !email || !location) return next(new ErrorHandler("plz add all field",400))
+
+    const user = await User.findById({_id: req.user.id})
+
+    if(!user) return next(new ErrorHandler('Not authorized',401))
+
+    user.name = name
+    user.email = email
+    user.location = location
+
+    user.save()
+
+    res.status(200).json({
+        success: true,
+        message:'u r updated',
+        user,
+        token: user.createJWT()
+    })
+    
+})

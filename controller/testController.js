@@ -1,4 +1,5 @@
-import {asyncHandler} from "../middleware/asyncHandler.js"
+import { asyncHandler } from "../middleware/asyncHandler.js";
+
 // @router [POST] /api/v1/test
 const postTest = asyncHandler(async(req,res,next)=>{
     const {name} = req.body;

@@ -30,7 +30,7 @@ const schema = new mongoose.Schema({
 // hashed password
 schema.pre("save", async function(){
 
-    if(!this.isModified("password")) return next()
+    if(!this.isModified("password")) return;
 
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
@@ -38,7 +38,7 @@ schema.pre("save", async function(){
 
 // generate token
 schema.methods.createJWT = function(){
-    return jwt.sign({userId:this._id},process.env.JWT_SECERT,{
+    return jwt.sign({_id:this._id},process.env.JWT_SECERT,{
         expiresIn:'15d'
     })
 }
