@@ -28,7 +28,56 @@ const createJob = asyncHandler(async (req, res, next) => {
 // @router: [POST] api/v1/job/getallJob
 // @access: private
 const getAllJobs = asyncHandler(async (req, res, next) => {
- const jobs = await Job.find({ createdBy: req.user.id });
+  const {status, workType, search, sort} = req.query;
+
+  // 1. condition for search query
+  const queryObject = {
+    createdBy: req.user.id
+  }
+
+  // 2. logic for searching filter
+    // based on status 
+  if(status && status !=="all"){
+    queryObject.status = status
+  }
+
+    // based on workType
+  if(workType && workType !=="all"){
+    queryObject.workType = workType
+  }
+
+    // based on position 
+  if(search){
+    queryObject.position = {$regex: search, $options: "i"}
+  }
+
+  let queryResult = Job.find(queryObject)
+
+  // sort 
+    // i. sorted based on latest
+  if(sort === "latest"){
+    queryResult = queryResult.sort('-createdAt')
+  }
+
+    // ii. sorted based on oldest
+  if (sort === "oldest"){
+    queryResult = queryResult.sort('createdAt')
+  }
+  
+    // iii. sorted based on asc position
+  if(sort === "a-z"){
+    queryResult = queryResult.sort('position')
+  }
+  
+    // iv. sorted based on desc position
+  if(sort === 'z-a'){
+    queryResult = queryResult.sort('-position')
+  }
+
+  const jobs = await queryResult;
+
+  // const jobs = await Job.find({ createdBy: req.user.id });
+
   res.status(200).json({
     success: true,
     totalJob: jobs.length,
