@@ -21,6 +21,17 @@ const createJob = asyncHandler(async(req,res,next)=>{
     })
 })
 
+// @desc: get all jobs
+// @router: [POST] api/v1/job/getallJob
+// @access: private
+const getAllJobs = asyncHandler(async(req,res,next)=>{
+    const jobs = await Job.find({createBy: req.user.id})
 
+    res.status(200).json({
+        success: true,
+        totalJob: jobs.length,
+        jobs
+    })
+})
 
-export {createJob};
+export {createJob, getAllJobs};
