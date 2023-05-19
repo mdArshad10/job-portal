@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
     },
     status:{
         type: String,
-        enum:['pending',"interveiw","reject"],
+        enum:['pending',"interview","reject"],
         default: "pending"
     },
     workType:{
@@ -25,7 +25,7 @@ const schema = new mongoose.Schema({
         default:'Kolkata',
         required:[true, "work location required"]
     },
-    createBy:{
+    createdBy:{
         type: mongoose.Types.ObjectId,
         ref:"User"
     },
