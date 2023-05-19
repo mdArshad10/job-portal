@@ -65,4 +65,25 @@ const updateJob = asyncHandler(async(req,res,next)=>{
     })
 })
 
-export {createJob, getAllJobs, updateJob};
+// @desc: delete the job
+// @router: [DELETE] api/v1/job/delete/idkfaodijfoiajd(:id)
+// @access: private
+const deleteJob = asyncHandler(async(req,res,next)=>{
+    const {id} = req.params;
+    const job = await Job.findById({_id:id})
+
+    // validation
+    if(!job) return next(new ErrorHandler("User not found",404))
+
+    // TODO: is mein tora sa kam karna hai
+    if(!job.createBy.toString() === req.user.id) return next(new ErrorHandler("your are not authorized to delete the jobs",401))
+
+    await job.deleteOne()
+
+    res.status(200).json({
+        success:true,
+        message: 'your job is deleted by successfully'
+    })
+})
+
+export {createJob, getAllJobs, updateJob, deleteJob};
