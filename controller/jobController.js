@@ -34,4 +34,35 @@ const getAllJobs = asyncHandler(async(req,res,next)=>{
     })
 })
 
-export {createJob, getAllJobs};
+// @desc: update the job
+// @router: [PATCH] api/v1/job/updatejob/idkfaodijfoiajd(:id)
+// @access: private
+const updateJob = asyncHandler(async(req,res,next)=>{
+    const {id} = req.params
+    const {company, position} = req.body;
+
+    // validation
+    if(!company || !position) return next(new ErrorHandler('plz add all field',404))
+    
+    const job = await Job.findById({_id: id})
+
+    if(!job) return next(new ErrorHandler("user not found",404))
+
+    // not some else update the job description
+
+    // TODO: IS MEIN KOI PROBLEM HO RAHA HAI US KO FIXED KARNA HAI
+    if(!req.user.id === job.createBy.toString()) return next(new ErrorHandler("not authorized to updated",401))
+
+    const updateJob = await Job.findByIdAndUpdate({_id:id}, req.body,{
+        new: true,
+        runValidators: true
+    })
+
+    res.status(200).json({
+        success: true,
+        message: "your are upate the job",
+        updateJob
+    })
+})
+
+export {createJob, getAllJobs, updateJob};
