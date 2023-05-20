@@ -74,13 +74,26 @@ const getAllJobs = asyncHandler(async (req, res, next) => {
     queryResult = queryResult.sort('-position')
   }
 
+  // adding pagination
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 10
+  const skip = (page - 1)*limit
+
+  queryResult = queryResult.skip(skip).limit(limit);
+
+  // total jobs
+  const totaljobs = await Job.countDocuments(queryResult)
+
+  // number of pages
+  const numberOfPage = Math.ceil(totaljobs/limit)
   const jobs = await queryResult;
 
   // const jobs = await Job.find({ createdBy: req.user.id });
 
   res.status(200).json({
     success: true,
-    totalJob: jobs.length,
+    numberOfPage,
+    totaljobs,
     jobs,
   });
 });
