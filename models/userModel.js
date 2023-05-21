@@ -22,6 +22,7 @@ const schema = new mongoose.Schema({
     },
     location:{
         type: String,
+        required:[true, 'location is required'],
         default: "India"
     }
 },{timestamps:true})
