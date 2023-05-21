@@ -68,6 +68,9 @@ app.use("/api/v1/job", jobRouter);
 // 
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
+app.use('/', (req,res)=>{
+  res.send(`<h1>this is backend of Job Portal</h1>`)
+})
 
 // listen
 app.listen(process.env.PORT, (req, res) => {
