@@ -55,7 +55,10 @@ const app = express();
 app.use(helmet());
 app.use(xss());
 app.use(ExpressMongoSanitize());
-app.use(cors());
+app.use(cors({
+  origin:"http://localhost/5137",
+  methods:["GET","POST","PATCH","DELETE"]
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
